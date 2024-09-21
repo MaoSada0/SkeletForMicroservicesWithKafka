@@ -6,5 +6,5 @@ import java.util.Optional;
 
 
 public interface MainService {
-    Optional<String> processJson(String json);
+    void sendMessage(String message);
 }
