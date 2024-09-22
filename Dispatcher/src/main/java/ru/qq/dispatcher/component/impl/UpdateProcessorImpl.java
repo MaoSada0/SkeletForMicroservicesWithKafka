@@ -37,6 +37,8 @@ public class UpdateProcessorImpl implements UpdateProcessor {
             return;
         }
 
+        mainService.processUpdate(update);
+
     }
 
 

@@ -4,3 +4,8 @@ server:
 spring:
   kafka:
     bootstrap-servers: localhost:9092
+    topic-message: message-topic
+    topic-file: file-topic
+    group-id:
+      string: string-group
+      document: document-group

@@ -11,6 +11,8 @@ import org.springframework.kafka.config.TopicBuilder;
 import org.springframework.kafka.core.DefaultKafkaProducerFactory;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.core.ProducerFactory;
+import org.springframework.kafka.support.serializer.JsonSerializer;
+import org.telegram.telegrambots.meta.api.objects.Document;
 
 
 import java.util.HashMap;
@@ -23,19 +25,28 @@ public class KafkaConfiguration {
     @Value("${spring.kafka.bootstrap-servers}")
     private String BOOSTRAP_SERVERS;
 
-    @Value("${spring.kafka.topic-name}")
-    private String TOPIC_NAME;
+    @Value("${spring.kafka.topic-message}")
+    private String TOPIC_MESSAGE;
 
+    @Value("${spring.kafka.topic-file}")
+    private String TOPIC_FILE;
 
     @Bean
-    public NewTopic newTopic(){
+    public NewTopic messageTopic(){
         return TopicBuilder
-                .name(TOPIC_NAME)
+                .name(TOPIC_MESSAGE)
                 .build();
     }
 
     @Bean
-    public Map<String, Object> producerConfiguration() {
+    public NewTopic fileTopic(){
+        return TopicBuilder
+                .name(TOPIC_FILE)
+                .build();
+    }
+
+    @Bean
+    public Map<String, Object> producerStringConfiguration() {
         Map<String, Object> configProperties = new HashMap<>();
         configProperties.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, BOOSTRAP_SERVERS);
         configProperties.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
@@ -44,13 +55,33 @@ public class KafkaConfiguration {
     }
 
     @Bean
-    public ProducerFactory<String, Object> producerFactory() {
-        return new DefaultKafkaProducerFactory<>(producerConfiguration());
+    public ProducerFactory<String, String> producerStringFactory() {
+        return new DefaultKafkaProducerFactory<>(producerStringConfiguration());
     }
 
     @Bean
-    public KafkaTemplate<String, Object> kafkaTemplate() {
-        return new KafkaTemplate<>(producerFactory());
+    public KafkaTemplate<String, String> kafkaStringTemplate() {
+        return new KafkaTemplate<>(producerStringFactory());
     }
+
+    @Bean
+    public Map<String, Object> producerDocumentConfiguration() {
+        Map<String, Object> configProperties = new HashMap<>();
+        configProperties.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, BOOSTRAP_SERVERS);
+        configProperties.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
+        configProperties.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
+        return configProperties;
+    }
+
+    @Bean
+    public ProducerFactory<String, Document> producerDocumentFactory() {
+        return new DefaultKafkaProducerFactory<>(producerDocumentConfiguration());
+    }
+
+    @Bean
+    public KafkaTemplate<String, Document> kafkaDocumentTemplate() {
+        return new KafkaTemplate<>(producerDocumentFactory());
+    }
+
 
 }
