@@ -21,21 +21,23 @@ import java.util.Map;
 public class KafkaConfiguration {
 
     @Value("${spring.kafka.bootstrap-servers}")
-    private String boostrapServers;
+    private String BOOSTRAP_SERVERS;
 
+    @Value("${spring.kafka.topic-name}")
+    private String TOPIC_NAME;
 
 
     @Bean
     public NewTopic newTopic(){
         return TopicBuilder
-                .name("main-topic")
+                .name(TOPIC_NAME)
                 .build();
     }
 
     @Bean
     public Map<String, Object> producerConfiguration() {
         Map<String, Object> configProperties = new HashMap<>();
-        configProperties.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, boostrapServers);
+        configProperties.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, BOOSTRAP_SERVERS);
         configProperties.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
         configProperties.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
         return configProperties;

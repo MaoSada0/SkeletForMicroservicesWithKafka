@@ -1,23 +1,30 @@
 package ru.qq.dispatcher.service.impl;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
+import ru.qq.dispatcher.client.NodeRestClient;
 import ru.qq.dispatcher.service.MainService;
-
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class MainServiceImpl implements MainService {
 
-    private final String TOPIC = "main-topic";
+    @Value("${spring.kafka.topic-name}")
+    private String TOPIC_NAME;
 
     private final KafkaTemplate<String, Object> kafkaTemplate;
 
+    private final NodeRestClient nodeRestClient;
+
+    @Override
+    public boolean checkIsActive(Long userId) {
+        return nodeRestClient.checkIsActive(userId);
+    }
+
     @Override
     public void sendMessage(String message) {
-        kafkaTemplate.send(TOPIC, message);
+        kafkaTemplate.send(TOPIC_NAME, message);
     }
 }
