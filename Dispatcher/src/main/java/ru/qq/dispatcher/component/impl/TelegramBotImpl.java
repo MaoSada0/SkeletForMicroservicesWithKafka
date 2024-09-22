@@ -3,6 +3,7 @@ package ru.qq.dispatcher.component.impl;
 import lombok.extern.log4j.Log4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.annotation.Scope;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramWebhookBot;
@@ -16,6 +17,7 @@ import ru.qq.dispatcher.component.TelegramBot;
 
 @Component
 @Log4j
+@Scope("singleton")
 public class TelegramBotImpl extends TelegramWebhookBot implements TelegramBot {
     @Value("${telegram-bot.username}")
     private String BOT_USERNAME;
@@ -48,7 +50,6 @@ public class TelegramBotImpl extends TelegramWebhookBot implements TelegramBot {
 
     @EventListener(ApplicationReadyEvent.class)
     public void init(){
-
         try {
             var setWebhook = SetWebhook.builder()
                     .url(BOT_URI)

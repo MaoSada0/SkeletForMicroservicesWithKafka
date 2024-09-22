@@ -4,8 +4,9 @@ server:
 spring:
   kafka:
     bootstrap-servers: localhost:9092
-    topic-message: message-topic
-    topic-file: file-topic
+    topic-message-to-dispatcher: message-topic-to-dispatcher
+    topic-message: message-topic-from-dispatcher
+    topic-file: file-topic-from-dispatcher
     group-id:
-      string: string-group
-      document: document-group
+      from-dispatcher: from-dispatcher
+      to-dispatcher: to-dispatcher

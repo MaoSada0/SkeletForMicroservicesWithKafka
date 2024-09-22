@@ -4,13 +4,17 @@ server:
 spring:
   kafka:
     bootstrap-servers: localhost:9092
-    topic-message: message-topic
-    topic-file: file-topic
+    topic-message-to-dispatcher: message-topic-to-dispatcher
+    topic-message: message-topic-from-dispatcher
+    topic-file: file-topic-from-dispatcher
+    group-id:
+      from-dispatcher: from-dispatcher
+      to-dispatcher: to-dispatcher
 
 telegram-bot:
   username: qqCheckYourStatsBot
   token: 7648929656:AAGdCnHfrLYd7zG7xjGeqm6r9E0UcagvUWE
-  webhook-uri: https://59b4-79-104-7-208.ngrok-free.app
+  webhook-uri: https://6699-79-104-7-208.ngrok-free.app
 
 project:
   node:
